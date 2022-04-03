@@ -1,17 +1,18 @@
 module UniqueNumbers
-  class RandomGenerator < Generator
+  class AlphaNumericGenerator < Generator
+
     store_accessor :settings, :minimum, :maximum, :max_tries, :scope
 
     after_initialize do |generator|
       generator.minimum ||= 0
       generator.maximum ||= 10**8 - 1
-      generator.max_tries ||= 10
+      generator.max_tries ||= 100
     end
 
     def assign_next_number(model = nil, attribute = nil, debug = false)
       self.with_lock do
         max_tries.times do
-          value = SecureRandom.random_number(maximum - minimum + 1) + minimum
+          value = (1..9).to_a[rand(9)].to_s + SecureRandom.alphanumeric(5).upcase
           now = Time.now
           model_scope = model.class.base_class
           case scope
